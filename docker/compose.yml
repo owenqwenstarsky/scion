@@ -1,0 +1,116 @@
+name: scion
+
+services:
+  scion-init:
+    image: debian:bookworm-slim
+    user: "0:0"
+    volumes:
+      - scion-data:/var/lib/scion
+    command: ["chown", "-R", "65532:65532", "/var/lib/scion"]
+    restart: "no"
+
+  scion-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.server
+    image: scion-server:local
+    environment:
+      SCION_IN_CONTAINER: "1"
+      SCION_DATA: /var/lib/scion
+      SCION_LISTEN: 0.0.0.0:8443
+      SCION_TLS_CERT_FILE: /run/secrets/tls.crt
+      SCION_TLS_KEY_FILE: /run/secrets/tls.key
+      SCION_BOOTSTRAP_TOKEN_FILE: /run/secrets/bootstrap
+      SCION_WEB_TOKEN_FILE: /run/secrets/web
+    ports:
+      - "0.0.0.0:${SCION_SERVER_PORT:-8443}:8443"
+    volumes:
+      - scion-data:/var/lib/scion
+    secrets:
+      - source: tls_crt
+        target: tls.crt
+      - source: tls_key
+        target: tls.key
+      - source: bootstrap
+        target: bootstrap
+      - source: web
+        target: web
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: ["/tmp"]
+    user: "65532:65532"
+    networks: [backend]
+    depends_on:
+      scion-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "scion-server", "healthcheck"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+  scion-web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.web
+    image: scion-web:local
+    environment:
+      SCION_SERVER_URL: https://scion-server:8443
+      SCION_WEB_TOKEN_FILE: /run/secrets/web
+      SCION_CA_FILE: /run/secrets/ca.crt
+      SCION_PUBLIC_ORIGIN: ${SCION_PUBLIC_ORIGIN:-https://localhost:8444}
+    secrets:
+      - source: web
+        target: web
+      - source: ca
+        target: ca.crt
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: ["/tmp"]
+    user: "65532:65532"
+    networks: [backend]
+    depends_on:
+      scion-server:
+        condition: service_healthy
+
+  caddy:
+    image: caddy:2.10
+    ports:
+      - "0.0.0.0:${SCION_WEB_PORT:-8444}:8444"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    secrets:
+      - source: tls_crt
+        target: tls.crt
+      - source: tls_key
+        target: tls.key
+    environment:
+      XDG_CONFIG_HOME: /tmp
+      XDG_DATA_HOME: /tmp
+    read_only: true
+    # The Caddy binary has file capabilities. cap_drop: ALL makes exec fail with EPERM.
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: ["/tmp", "/data", "/config"]
+    networks: [backend]
+    depends_on: [scion-web]
+
+secrets:
+  tls_crt:
+    file: ./secrets/tls.crt
+  tls_key:
+    file: ./secrets/tls.key
+  bootstrap:
+    file: ./secrets/bootstrap
+  web:
+    file: ./secrets/web
+  ca:
+    file: ./secrets/ca.crt
+
+volumes:
+  scion-data:
+
+networks:
+  backend:
