@@ -1,0 +1,21 @@
+# Release build of the container-only server. The host CLI is a different binary.
+FROM rust:1.99-bookworm AS build
+WORKDIR /src
+COPY Cargo.toml Cargo.lock rust-toolchain.toml clippy.toml ./
+COPY crates crates
+COPY xtask xtask
+RUN cargo build --release -p scion-server
+
+FROM debian:bookworm-slim
+RUN useradd --system --uid 65532 --home /var/lib/scion --shell /usr/sbin/nologin scion \
+    && mkdir -p /var/lib/scion \
+    && chown 65532:65532 /var/lib/scion
+COPY --from=build /src/target/release/scion-server /usr/local/bin/scion-server
+USER 65532:65532
+ENV SCION_IN_CONTAINER=1 \
+    SCION_DATA=/var/lib/scion \
+    SCION_LISTEN=0.0.0.0:8443 \
+    SCION_ADMIN_LISTEN=127.0.0.1:9100
+EXPOSE 8443
+ENTRYPOINT ["scion-server"]
+CMD ["serve"]

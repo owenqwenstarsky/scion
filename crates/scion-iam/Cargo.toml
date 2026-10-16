@@ -1,0 +1,23 @@
+[package]
+name = "scion-iam"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+description = "Accounts, sessions, tokens, and repository authorization"
+
+[dependencies]
+argon2 = { workspace = true, features = ["password-hash"] }
+globset.workspace = true
+hex.workspace = true
+password-hash.workspace = true
+rusqlite.workspace = true
+scion-core.workspace = true
+scion-store.workspace = true
+subtle.workspace = true
+thiserror.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

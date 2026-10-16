@@ -1,0 +1,11 @@
+[package]
+name = "scion-review"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+description = "Review decisions. Comments are not a hosted workflow yet."
+
+[dependencies]
+thiserror.workspace = true

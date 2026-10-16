@@ -1,0 +1,20 @@
+[package]
+name = "scion-derived"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+description = "Derived data: manifests, commit graph, blame, path history"
+
+[dependencies]
+blake3.workspace = true
+diffy.workspace = true
+scion-core.workspace = true
+scion-merge.workspace = true
+scion-store.workspace = true
+similar.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

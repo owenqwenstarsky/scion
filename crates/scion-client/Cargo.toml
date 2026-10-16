@@ -1,0 +1,20 @@
+[package]
+name = "scion-client"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+description = "Host-side Scion client. Talks to the JSON façade and never links the server."
+
+[dependencies]
+globset.workspace = true
+reqwest.workspace = true
+scion-core.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -1,0 +1,19 @@
+[package]
+name = "scion-store"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+description = "SQLite metadata and content-addressed blob storage"
+
+[dependencies]
+fastcdc.workspace = true
+hex.workspace = true
+rusqlite.workspace = true
+scion-core.workspace = true
+thiserror.workspace = true
+zstd.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

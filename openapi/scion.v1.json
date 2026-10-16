@@ -1,0 +1,26 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Scion JSON façade",
+    "version": "0.1.0",
+    "description": "The HTTP API served by scion-server. Authorization is enforced in scion-iam. This file is hand-written and covers the routes the CLI and web UI call; it is not generated from annotations."
+  },
+  "paths": {
+    "/v1/health": { "get": { "operationId": "health", "responses": { "200": { "description": "ok" } } } },
+    "/v1/setup/first-admin": { "post": { "operationId": "firstAdmin", "responses": { "201": { "description": "created" }, "409": { "description": "already bootstrapped" } } } },
+    "/v1/auth/login": { "post": { "operationId": "login", "responses": { "200": { "description": "session" }, "401": { "description": "invalid credentials" } } } },
+    "/v1/auth/logout": { "post": { "operationId": "logout", "responses": { "204": { "description": "logged out" } } } },
+    "/v1/auth/change-password": { "post": { "operationId": "changePassword", "responses": { "204": { "description": "changed" } } } },
+    "/v1/auth/session": { "get": { "operationId": "session", "responses": { "200": { "description": "caller" } } } },
+    "/v1/users": { "get": { "operationId": "listUsers", "responses": { "200": { "description": "users" } } }, "post": { "operationId": "createUser", "responses": { "201": { "description": "created" } } } },
+    "/v1/repos": { "get": { "operationId": "listRepos", "responses": { "200": { "description": "visible repos" } } }, "post": { "operationId": "createRepo", "responses": { "201": { "description": "created" } } } },
+    "/v1/repos/{owner}/{name}": { "get": { "operationId": "getRepo", "responses": { "200": { "description": "repo" }, "404": { "description": "missing or hidden" } } } },
+    "/v1/repos/{owner}/{name}/land": { "post": { "operationId": "land", "responses": { "200": { "description": "landed" }, "409": { "description": "conflict or contention" } } } },
+    "/v1/repos/{owner}/{name}/edits": { "post": { "operationId": "edits", "responses": { "200": { "description": "landed" } } } },
+    "/v1/repos/{owner}/{name}/tree": { "get": { "operationId": "tree", "responses": { "200": { "description": "directory" } } } },
+    "/v1/repos/{owner}/{name}/file": { "get": { "operationId": "file", "responses": { "200": { "description": "file" } } } },
+    "/v1/repos/{owner}/{name}/blame": { "get": { "operationId": "blame", "responses": { "200": { "description": "blame" } } } },
+    "/v1/repos/{owner}/{name}/diff": { "get": { "operationId": "diff", "responses": { "200": { "description": "diff" } } } },
+    "/v1/repos/{owner}/{name}/grants": { "put": { "operationId": "setGrant", "responses": { "204": { "description": "updated" } } } }
+  }
+}

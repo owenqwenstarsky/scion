@@ -1,0 +1,11 @@
+{
+	auto_https off
+	admin off
+}
+
+:8444 {
+	tls /run/secrets/tls.crt /run/secrets/tls.key
+	reverse_proxy scion-web:3000 {
+		flush_interval -1
+	}
+}

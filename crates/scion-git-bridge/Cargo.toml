@@ -1,0 +1,16 @@
+[package]
+name = "scion-git-bridge"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+description = "Import and export loose Git objects. Packfiles are not read."
+
+[dependencies]
+hex.workspace = true
+scion-core.workspace = true
+sha1.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
