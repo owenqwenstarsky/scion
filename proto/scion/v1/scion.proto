@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package scion.v1;
+
+// Intended gRPC surface. This build serves the same operations as JSON under
+// /v1 on the server's TLS port. The gRPC service is not registered.
+
+service Scion {
+  rpc GetBlob(GetBlobRequest) returns (GetBlobResponse);
+  rpc PutBlob(PutBlobRequest) returns (PutBlobResponse);
+  rpc CreateChangeset(CreateChangesetRequest) returns (Changeset);
+  rpc Land(LandRequest) returns (LandResponse);
+  rpc GetRef(GetRefRequest) returns (Ref);
+}
+
+message GetBlobRequest {
+  string owner = 1;
+  string name = 2;
+  string blob_id = 3;
+}
+
+message GetBlobResponse {
+  bytes data = 1;
+}
+
+message PutBlobRequest {
+  string owner = 1;
+  string name = 2;
+  bytes data = 3;
+}
+
+message PutBlobResponse {
+  string blob_id = 1;
+  uint64 size = 2;
+}
+
+message CreateChangesetRequest {
+  string owner = 1;
+  string name = 2;
+  repeated string parents = 3;
+  string message = 4;
+}
+
+message Changeset {
+  string id = 1;
+  repeated string parents = 2;
+  string message = 3;
+}
+
+message LandRequest {
+  string owner = 1;
+  string name = 2;
+  string changeset = 3;
+  string ref = 4;
+  string strategy = 5;
+}
+
+message LandResponse {
+  string landed = 1;
+  uint32 attempts = 2;
+}
+
+message GetRefRequest {
+  string owner = 1;
+  string name = 2;
+  string ref = 3;
+}
+
+message Ref {
+  string name = 1;
+  string target = 2;
+}

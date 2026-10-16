@@ -1,0 +1,11 @@
+[package]
+name = "scion-search"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+description = "Path and text search over an already-materialized tree. Not a trigram index."
+
+[dependencies]
+scion-core.workspace = true

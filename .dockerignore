@@ -1,0 +1,8 @@
+target
+.git
+**/.next
+**/node_modules
+docker/secrets
+apps/web/test-results
+apps/web/playwright-report
+**/*.log

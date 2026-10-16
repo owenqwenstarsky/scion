@@ -1,0 +1,96 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/scion-core",
+    "crates/scion-proto",
+    "crates/scion-merge",
+    "crates/scion-store",
+    "crates/scion-derived",
+    "crates/scion-iam",
+    "crates/scion-server",
+    "crates/scion-client",
+    "crates/scion-vfs",
+    "crates/scion-git-bridge",
+    "crates/scion-search",
+    "crates/scion-review",
+    "crates/scion-sim",
+    "crates/scion-cli",
+    "xtask",
+]
+exclude = ["fuzz"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+publish = false
+rust-version = "1.88"
+
+[workspace.dependencies]
+scion-core = { path = "crates/scion-core" }
+scion-proto = { path = "crates/scion-proto" }
+scion-merge = { path = "crates/scion-merge" }
+scion-store = { path = "crates/scion-store" }
+scion-derived = { path = "crates/scion-derived" }
+scion-iam = { path = "crates/scion-iam" }
+scion-server = { path = "crates/scion-server" }
+scion-client = { path = "crates/scion-client" }
+scion-vfs = { path = "crates/scion-vfs" }
+scion-git-bridge = { path = "crates/scion-git-bridge" }
+scion-search = { path = "crates/scion-search" }
+scion-review = { path = "crates/scion-review" }
+scion-sim = { path = "crates/scion-sim" }
+
+anyhow = "1"
+argon2 = "0.6"
+async-trait = "0.1"
+axum = { version = "0.8", features = ["json", "macros"] }
+base64 = "0.22"
+blake3 = "1.8"
+bytes = "1"
+clap = { version = "4", features = ["derive"] }
+diffy = "0.5"
+fastcdc = "5"
+flate2 = "1"
+futures = "0.3"
+globset = "0.4"
+hex = "0.4"
+http = "1"
+http-body-util = "0.1"
+hyper = "1"
+hyper-util = { version = "0.1", features = ["server", "http1", "http2", "tokio"] }
+notify = "8"
+password-hash = "0.6"
+proptest = "1"
+prost = "0.14"
+rand = "0.9"
+rcgen = "0.14"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "stream"] }
+rusqlite = { version = "0.40", features = ["bundled", "backup"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha1 = "0.10"
+similar = "3"
+subtle = "2"
+tar = "0.4"
+tempfile = "3"
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+tokio-rustls = "0.26"
+tonic = "0.14"
+tonic-prost = "0.14"
+tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.6", features = ["limit", "trace", "timeout", "set-header"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+utoipa = { version = "6", features = ["axum_extras"] }
+zeroize = { version = "1", features = ["derive"] }
+zstd = "0.14"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+
+[profile.dev]
+# Keep test builds tolerable in a large workspace.
+debug = 0

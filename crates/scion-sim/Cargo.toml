@@ -1,0 +1,15 @@
+[package]
+name = "scion-sim"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+description = "In-process landing simulation for ref invariants."
+
+[dependencies]
+scion-core.workspace = true
+scion-store.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
